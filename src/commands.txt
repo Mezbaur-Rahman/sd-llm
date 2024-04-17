@@ -1,0 +1,33 @@
+
+export MODEL="TinyLlama/TinyLlama-1.1B-Chat-v1.0" 
+
+if [ $MODEL = "roberta-base" ]; then
+    BATCH_SIZE=16
+    LEARNING_RATE=1e-5
+    WEIGHT_DECAY=0
+fi
+
+
+export MODEL="TinyLlama/TinyLlama-1.1B-Chat-v1.0" 
+
+CUDA_VISIBLE_DEVICE=3 python3 LLM_finetune.py \
+    --model $MODEL \
+    --dataset "semeval"
+
+
+
+export MODEL="lmsys/vicuna-7b-v1.5"
+
+CUDA_VISIBLE_DEVICE=2 python3 LLM_gen.py \
+    --model $MODEL \
+    --task "SD" \
+    --dataset "semeval"
+
+
+export MODEL="lmsys/vicuna-7b-v1.5"
+
+CUDA_VISIBLE_DEVICE=3 python3 LLM_gen.py \
+    --model $MODEL \
+    --task "MTSD" \
+    --dataset "semeval"
+

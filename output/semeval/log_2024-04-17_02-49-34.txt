@@ -1,0 +1,23 @@
+2024-04-17 02:49:37 - INFO - Completed 0/1080 Iterations in 3.17755389213562 seconds
+2024-04-17 02:50:46 - INFO - Completed 50/1080 Iterations in 68.62861919403076 seconds
+2024-04-17 02:51:43 - INFO - Completed 100/1080 Iterations in 57.42979431152344 seconds
+2024-04-17 02:52:35 - INFO - Completed 150/1080 Iterations in 51.74777102470398 seconds
+2024-04-17 02:53:38 - INFO - Completed 200/1080 Iterations in 62.833335638046265 seconds
+2024-04-17 02:54:43 - INFO - Completed 250/1080 Iterations in 65.67114233970642 seconds
+2024-04-17 02:55:47 - INFO - Completed 300/1080 Iterations in 63.68270182609558 seconds
+2024-04-17 02:56:53 - INFO - Completed 350/1080 Iterations in 65.4973304271698 seconds
+2024-04-17 02:58:04 - INFO - Completed 400/1080 Iterations in 71.54695391654968 seconds
+2024-04-17 02:59:08 - INFO - Completed 450/1080 Iterations in 63.62134528160095 seconds
+2024-04-17 03:00:07 - INFO - Completed 500/1080 Iterations in 59.25757455825806 seconds
+2024-04-17 03:01:14 - INFO - Completed 550/1080 Iterations in 66.98560667037964 seconds
+2024-04-17 03:02:10 - INFO - Completed 600/1080 Iterations in 56.142231941223145 seconds
+2024-04-17 03:03:08 - INFO - Completed 650/1080 Iterations in 57.30540609359741 seconds
+2024-04-17 03:04:04 - INFO - Completed 700/1080 Iterations in 56.04744911193848 seconds
+2024-04-17 03:05:02 - INFO - Completed 750/1080 Iterations in 58.156434059143066 seconds
+2024-04-17 03:05:56 - INFO - Completed 800/1080 Iterations in 54.72973704338074 seconds
+2024-04-17 03:07:20 - INFO - Completed 850/1080 Iterations in 83.15750002861023 seconds
+2024-04-17 03:08:41 - INFO - Completed 900/1080 Iterations in 81.60808563232422 seconds
+2024-04-17 03:10:05 - INFO - Completed 950/1080 Iterations in 83.80087423324585 seconds
+2024-04-17 03:11:28 - INFO - Completed 1000/1080 Iterations in 83.381192445755 seconds
+2024-04-17 03:12:51 - INFO - Completed 1050/1080 Iterations in 82.44589710235596 seconds
+2024-04-17 03:13:39 - INFO - vicuna_test.csv is saved to /home/mrahma56/TSE_final/output/semeval
