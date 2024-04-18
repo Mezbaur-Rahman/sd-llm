@@ -98,3 +98,7 @@
 2024-04-18 00:36:19 - INFO - Completed 4850/5109 Iterations in 58.41046166419983 seconds
 2024-04-18 00:37:18 - INFO - Completed 4900/5109 Iterations in 58.9329617023468 seconds
 2024-04-18 00:38:18 - INFO - Completed 4950/5109 Iterations in 60.234076738357544 seconds
+2024-04-18 00:39:18 - INFO - Completed 5000/5109 Iterations in 59.968010902404785 seconds
+2024-04-18 00:40:19 - INFO - Completed 5050/5109 Iterations in 60.95578193664551 seconds
+2024-04-18 00:41:19 - INFO - Completed 5100/5109 Iterations in 59.352166414260864 seconds
+2024-04-18 00:41:28 - INFO - mistral_masked_test.csv is saved to /home/mrahma56/TSE_final/output/am

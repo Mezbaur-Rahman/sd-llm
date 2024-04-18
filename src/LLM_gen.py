@@ -47,7 +47,7 @@ def make_path(*args):
     os.makedirs(path, exist_ok=True)
     return path
 
-root_dir = "./../"
+root_dir = "./"
 data_dir = make_path(root_dir + "data/",f"{args.dataset}")
 output_dir = make_path(root_dir + "output/",f"{args.dataset}")
 model_dir = make_path(root_dir + "saved_model/",f"{args.dataset}")
@@ -207,8 +207,8 @@ for i in range(len(test_df)):
     # break
     if i % 50 == 0:
         en = time.time()
-        print(f"Completed {i}/{len(test_df)} Iterations in {en - st} seconds")
-        logging.info(f"Completed {i}/{len(test_df)} Iterations in {en - st} seconds")
+        print(f"Completed {i + 1}/{len(test_df)} Iterations in {en - st} seconds")
+        logging.info(f"Completed {i + 1}/{len(test_df)} Iterations in {en - st} seconds")
         st = time.time()
         # break
 print(output_dir)

@@ -16,11 +16,14 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
 import warnings
 import argparse
 from bert_score import score
+import logging
+import datetime
 
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--dataset', type=str, help='dataset name')
+parser.add_argument('--split', type=str, help='train or test or val')
 parser.add_argument('--model', type=str, help='pre-trained model (bert-base-uncased, roberta-base)')
 args = parser.parse_args()
 
@@ -58,9 +61,18 @@ data_dir = make_path(root_dir + "data/",f"{args.dataset}")
 output_dir = make_path(root_dir + "output/",f"{args.dataset}")
 processed_data_dir = make_path(root_dir + "processed_data/",f"{args.dataset}")
 
-
-test_df = csv2pd(os.path.join(data_dir ,"test.csv"))
-# test_df.head()
+if args.split == "train":
+    df = csv2pd(os.path.join(data_dir ,"train.csv"))
+    print("Split is train")
+elif args.split == "test":
+    df = csv2pd(os.path.join(data_dir ,"test.csv"))
+    print("Split is test")
+else:
+    df = csv2pd(os.path.join(data_dir ,"val.csv"))
+    print("Split is val")
+print("Length of the dataframe:",len(df))
+print("Processed Data Directory:",processed_data_dir)
+# time.sleep(1000)
 
 
 
@@ -115,24 +127,44 @@ def replace_with_mask(target_word, text):
 # print(modified_text)
 
 
+# Get the current timestamp
+timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+output_log_path = os.path.join(processed_data_dir,f'log_{timestamp}.txt')
+print(f"Logging to {output_log_path}")
+logging.basicConfig(
+    filename=output_log_path,
+    filemode='w',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
 
 st = time.time()
-test_df['masked_tweet'] = ""
-for i in range(len(test_df)):
-    tweet = test_df.iloc[i]['Tweet']
-    target = test_df.iloc[i]['Target']
-    stance = test_df.iloc[i]['Stance']
+df['masked_tweet'] = ""
+for i in range(len(df)):
+    tweet = df.iloc[i]['Tweet']
+    target = df.iloc[i]['Target']
+    stance = df.iloc[i]['Stance']
     masked_tweet = replace_with_mask(target, tweet)
-    test_df.at[i,'masked_tweet'] = masked_tweet
+    df.at[i,'masked_tweet'] = masked_tweet
     # print(response)
     # break
-    if (i + 1) % 10 == 0:
+    if i % 10 == 0:
         en = time.time()
-        print(f"Completed {i}/{len(test_df)} Iterations in {en - st} seconds")
+        print(f"Completed {i + 1}/{len(df)} Iterations in {en - st} seconds")
+        logging.info(f"Completed {i + 1}/{len(df)} Iterations in {en - st} seconds")
         st = time.time()
         # break
 
 
 
-
-pd2csv(test_df,processed_data_dir,"masked_test.csv")
+if args.split == "train":
+    pd2csv(df,processed_data_dir,"masked_train.csv")
+    print(f"Masked Train CSV file created in {processed_data_dir}")
+elif args.split == "test":
+    pd2csv(df,processed_data_dir,"masked_test.csv")
+    print(f"Masked Test CSV file created in {processed_data_dir}")
+else:
+    pd2csv(df,processed_data_dir,"masked_val.csv")
+    print(f"Masked Val CSV file created in {processed_data_dir}")

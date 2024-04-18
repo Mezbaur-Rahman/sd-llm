@@ -56,7 +56,7 @@ def make_path(*args):
     os.makedirs(path, exist_ok=True)
     return path
 
-root_dir = "./../"
+root_dir = "./"
 data_dir = make_path(root_dir + "data/",f"{args.dataset}")
 output_dir = make_path(root_dir + "output/",f"{args.dataset}")
 model_dir = make_path(root_dir + "saved_model/",f"{args.dataset}")

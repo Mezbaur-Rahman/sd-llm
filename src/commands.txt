@@ -10,7 +10,7 @@ fi
 
 export MODEL="TinyLlama/TinyLlama-1.1B-Chat-v1.0" 
 
-CUDA_VISIBLE_DEVICE=3 python3 LLM_finetune.py \
+CUDA_VISIBLE_DEVICES=3 python3 LLM_finetune.py \
     --model $MODEL \
     --dataset "semeval"
 
@@ -18,30 +18,50 @@ CUDA_VISIBLE_DEVICE=3 python3 LLM_finetune.py \
 
 export MODEL="lmsys/vicuna-7b-v1.5"
 
-CUDA_VISIBLE_DEVICE=2 python3 LLM_gen.py \
+CUDA_VISIBLE_DEVICES=3 python3 src/LLM_gen.py \
     --model $MODEL \
     --task "SD" \
-    --dataset "semeval"
+    --dataset "pstance"
 
 
 export MODEL="lmsys/vicuna-7b-v1.5"
 
-CUDA_VISIBLE_DEVICE=0 python3 LLM_gen.py \
+CUDA_VISIBLE_DEVICES=0 python3 LLM_gen.py \
     --model $MODEL \
     --task "MTSD" \
     --dataset "pstance"
 
 
-export MODEL="mistralai/Mistral-7B-Instruct-v0.2"
-
-CUDA_VISIBLE_DEVICE=0 python3 src/eval.py \
+export MODEL="lmsys/vicuna-7b-v1.5"
+CUDA_VISIBLE_DEVICES=0 python3 src/eval.py \
     --model $MODEL \
     --task "MTSD" \
-    --dataset "covid19"
+    --dataset "am"
 
 export MODEL="mistralai/Mistral-7B-Instruct-v0.2"
-CUDA_VISIBLE_DEVICE=0 python3 src/eval.py \
+CUDA_VISIBLE_DEVICES=0 python3 src/eval.py \
     --model $MODEL \
     --task "SD" \
     --dataset "combined"
 
+
+export MODEL="TinyLlama/TinyLlama-1.1B-Chat-v1.0" 
+
+CUDA_VISIBLE_DEVICES=3 python3 src/LLM_finetune.py \
+    --model $MODEL \
+    --dataset "semeval"
+
+export MODEL="roberta-base" 
+
+CUDA_VISIBLE_DEVICES=2 python3 src/mask_related_words.py \
+    --model $MODEL \
+    --split "val" \
+    --dataset "combined"
+
+
+conda env export --name myenv > environment.yml
+pip freeze > pip_packages.txt
+echo "# Pip-installed packages" >> environment.yml
+cat pip_packages.txt >> environment.yml
+
+conda env create -n dummy_env -f environment.yml
