@@ -59,9 +59,4 @@ CUDA_VISIBLE_DEVICES=2 python3 src/mask_related_words.py \
     --dataset "combined"
 
 
-conda env export --name myenv > environment.yml
-pip freeze > pip_packages.txt
-echo "# Pip-installed packages" >> environment.yml
-cat pip_packages.txt >> environment.yml
 
-conda env create -n dummy_env -f environment.yml
