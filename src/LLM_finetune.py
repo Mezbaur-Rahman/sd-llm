@@ -34,6 +34,8 @@ parser.add_argument('--batch_size', type=int, default=16, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=1.0708609960508476e-05, help='learning rate')
 parser.add_argument('--do_train', action='store_true', default=False, help='enable training')
 parser.add_argument('--do_evaluate', action='store_true', default=False, help='enable evaluation')
+parser.add_argument('--task', type=str,default='SD',help='masked text stance detection (MTSD) or normal stance detection (SD)')
+parser.add_argument('--train_split',default='train', type=str, help='train  or val')
 args = parser.parse_args()
 print(args)
 
@@ -57,20 +59,27 @@ def make_path(*args):
     return path
 
 root_dir = "./"
-data_dir = make_path(root_dir + "data/",f"{args.dataset}")
 output_dir = make_path(root_dir + "output/",f"{args.dataset}")
-model_dir = make_path(root_dir + "saved_model/",f"{args.dataset}")
+if args.task == "SD":
+    data_dir = make_path(root_dir + "data/",f"{args.dataset}")
+    model_dir = make_path(root_dir + "saved_model/",f"{args.dataset}")
+else:
+    data_dir = make_path(root_dir + "processed_data/",f"{args.dataset}")
+    model_dir = make_path(root_dir + "saved_model/",f"{args.task}",f"{args.dataset}")
+
+
+    
 # model_id="TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 model_id= args.model
 base_model = model_id.split("/")[0]
 output_model_dir = make_path(model_dir,model_id.split("/")[0])
 
-print()
-print(f"Data directory: {data_dir}")
-print(f"Output directory: {output_dir}")
-print(f"Model directory: {model_dir}")
-print(f"Model ID: {model_id}")
-print(f"Output Model directory: {output_model_dir}")
+# print()
+# print(f"Data directory: {data_dir}")
+# print(f"Output directory: {output_dir}")
+# print(f"Model directory: {model_dir}")
+# print(f"Model ID: {model_id}")
+# print(f"Output Model directory: {output_model_dir}")
 # time.sleep(1000)
 
 
@@ -107,8 +116,20 @@ def prepare_test_data(data_df):
     # data = Dataset.from_pandas(data_df)
     return data_df
 
-train_df = csv2pd(data_dir + "train.csv")
-test_df = csv2pd(data_dir + "test.csv")
+if args.train_split == "train":
+    train_df = csv2pd(os.path.join(data_dir,"train.csv"))
+    test_df = csv2pd(os.path.join(data_dir, "test.csv"))
+else:
+    train_df = csv2pd(os.path.join(data_dir,"masked_val.csv"))
+    test_df = csv2pd(os.path.join(data_dir,"masked_test.csv"))
+    train_df.rename(columns = {'Tweet':'orig_tweet'}, inplace = True)
+    test_df.rename(columns = {'Tweet':'orig_tweet'}, inplace = True)
+    train_df.rename(columns = {'masked_tweet':'Tweet'}, inplace = True)
+    test_df.rename(columns = {'masked_tweet':'Tweet'}, inplace = True)
+    
+print(train_df.columns)
+# time.sleep(1000)
+
 
 data = prepare_train_data(train_df)
 test_data = prepare_test_data(test_df)
@@ -133,40 +154,41 @@ peft_config = LoraConfig(
         r=16, lora_alpha=16, lora_dropout=0.05, bias="none", task_type="CAUSAL_LM"
     )
 
+
+training_arguments = TrainingArguments(
+        output_dir=output_model_dir,
+        per_device_train_batch_size=4,
+        gradient_accumulation_steps=4,
+        optim="paged_adamw_32bit",
+        learning_rate=2e-4,
+        lr_scheduler_type="cosine",
+        save_strategy="epoch",
+        logging_steps=10,
+        num_train_epochs=20,
+        # max_steps=250,
+        fp16=True,
+        # push_to_hub=True
+    )
+
+trainer = SFTTrainer(
+        model=model,
+        train_dataset=data,
+        peft_config=peft_config,
+        dataset_text_field="text",
+        args=training_arguments,
+        tokenizer=tokenizer,
+        packing=False,
+        max_seq_length=1024
+    )
+
 if args.do_train:
-    training_arguments = TrainingArguments(
-            output_dir=output_model_dir,
-            per_device_train_batch_size=4,
-            gradient_accumulation_steps=4,
-            optim="paged_adamw_32bit",
-            learning_rate=2e-4,
-            lr_scheduler_type="cosine",
-            save_strategy="epoch",
-            logging_steps=10,
-            num_train_epochs=20,
-            # max_steps=250,
-            fp16=True,
-            # push_to_hub=True
-        )
-
-    trainer = SFTTrainer(
-            model=model,
-            train_dataset=data,
-            peft_config=peft_config,
-            dataset_text_field="text",
-            args=training_arguments,
-            tokenizer=tokenizer,
-            packing=False,
-            max_seq_length=1024
-        )
-
     trainer.train()
     print("Training is done.")
 
 
 
-if not args.do_evaluate:
-    sys.exit("Evaluation is not enabled. Exiting...")
+# if not args.do_evaluate:
+#     sys.exit("Evaluation is not enabled. Exiting...")
 
 
 
@@ -242,4 +264,9 @@ for i in range (len(test_data)):
 # print(count,len(test_data))
 # print(count/len(test_data) * 100)
 
-pd2csv(test_data,output_dir,f"{base_model}_finetuned_test.csv")
+if args.task == "MTSD":
+    pd2csv(test_data,output_dir,f"MTSD_{base_model}_finetuned_test.csv")
+    print(f"MTSD Finetuned Test Data Saved in {output_dir}")
+else:
+    pd2csv(test_data,output_dir,f"{base_model}_finetuned_test.csv")
+    print(f"Finetuned Test Data Saved in {output_dir}")
