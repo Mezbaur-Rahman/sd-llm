@@ -1,0 +1,5 @@
+,Strategy,semeval,,covid19,,am,,pstance,,combined,
+,,Acc,F1-score,Acc,F1-score,Acc,F1-score,Acc,F1-score,Acc,F1-score
+Mistral-7B-Instruct-v0.2,Zeroshot,0.3851851852,0.3999137721,0.52375,0.4957335285,,,0.4770514604,0.5854496466,,
+vicuna-7b-v1.5,Zeroshot,0.4157407407,0.4273673074,0.49125,0.4725023104,,,0.4204914233,0.5370398015,,
+Tiny llama,Finetuned,,,,,,,,,,
