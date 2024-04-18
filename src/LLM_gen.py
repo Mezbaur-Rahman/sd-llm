@@ -124,6 +124,21 @@ def convert_to_mistral_format(prompt):
     mistral_prompt = f"<s>[INST] {prompt} [/INST]\nAssistant:"
     return mistral_prompt
 
+def convert_to_llama_format(prompt):
+    """
+    Converts a given prompt to the Llama prompt format.
+    
+    Args:
+        prompt (str): The input prompt to be converted.
+        
+    Returns:
+        str: The prompt in Llama format.
+    """
+    sys_prompt = "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."
+    llama_prompt = f"User: {prompt}\nAssistant:"
+    llama_prompt = f"<s>[INST] <<SYS>>\n{sys_prompt}\n<</SYS>>\n{llama_prompt} [/INST]"
+    
+    return llama_prompt
 
 def generate_text(prompt, max_new_tokens=25, num_return_sequences=1, top_k=50, top_p=0.95, num_beams=4, early_stopping=True):
     input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
@@ -199,6 +214,8 @@ for i in range(len(test_df)):
         # print(prompt)
     if base_model == "mistral":
         prompt = convert_to_mistral_format(prompt)
+    if base_model == "llama":
+        prompt = convert_to_llama_format(prompt)
     
     # prompt = [{"role": "user", "content": base_prompt}]
     response = generate_text(prompt)

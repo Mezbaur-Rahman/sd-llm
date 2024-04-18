@@ -64,4 +64,4 @@ export MODEL="mistralai/Mistral-7B-Instruct-v0.2"
 CUDA_VISIBLE_DEVICES=0 python3 src/eval.py \
     --model $MODEL \
     --task "SD" \
-    --dataset "covid19"
+    --dataset "pstance"
