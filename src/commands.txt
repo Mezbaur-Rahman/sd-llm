@@ -59,4 +59,9 @@ CUDA_VISIBLE_DEVICES=2 python3 src/mask_related_words.py \
     --dataset "combined"
 
 
-
+export MODEL="lmsys/vicuna-7b-v1.5"
+export MODEL="mistralai/Mistral-7B-Instruct-v0.2"
+CUDA_VISIBLE_DEVICES=0 python3 src/eval.py \
+    --model $MODEL \
+    --task "SD" \
+    --dataset "covid19"
