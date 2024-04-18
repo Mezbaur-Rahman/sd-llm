@@ -21,7 +21,7 @@ import datetime
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--device', type=int, default=0, help='CUDA device')
-parser.add_argument('--model', type=str, help='pre-trained model (bert-base-uncased, roberta-base)')
+parser.add_argument('--model', type=str, help='huggingface model id')
 
 parser.add_argument('--max_seq_length', type=int, default=256, help='max sequence length')
 parser.add_argument('--ckpt_path', type=str, help='model checkpoint path')

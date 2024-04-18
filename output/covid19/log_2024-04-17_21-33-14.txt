@@ -1,0 +1,17 @@
+2024-04-17 21:33:16 - INFO - Completed 0/800 Iterations in 2.04937481880188 seconds
+2024-04-17 21:34:18 - INFO - Completed 50/800 Iterations in 61.45887589454651 seconds
+2024-04-17 21:35:19 - INFO - Completed 100/800 Iterations in 61.52897596359253 seconds
+2024-04-17 21:36:20 - INFO - Completed 150/800 Iterations in 60.68491768836975 seconds
+2024-04-17 21:37:22 - INFO - Completed 200/800 Iterations in 62.27147722244263 seconds
+2024-04-17 21:38:24 - INFO - Completed 250/800 Iterations in 61.4258086681366 seconds
+2024-04-17 21:39:23 - INFO - Completed 300/800 Iterations in 59.50316762924194 seconds
+2024-04-17 21:40:25 - INFO - Completed 350/800 Iterations in 61.78620719909668 seconds
+2024-04-17 21:41:27 - INFO - Completed 400/800 Iterations in 61.94898533821106 seconds
+2024-04-17 21:42:29 - INFO - Completed 450/800 Iterations in 62.63390612602234 seconds
+2024-04-17 21:43:31 - INFO - Completed 500/800 Iterations in 61.816563844680786 seconds
+2024-04-17 21:44:33 - INFO - Completed 550/800 Iterations in 62.166764974594116 seconds
+2024-04-17 21:45:35 - INFO - Completed 600/800 Iterations in 61.89524745941162 seconds
+2024-04-17 21:46:37 - INFO - Completed 650/800 Iterations in 61.51079177856445 seconds
+2024-04-17 21:47:38 - INFO - Completed 700/800 Iterations in 61.325390100479126 seconds
+2024-04-17 21:48:40 - INFO - Completed 750/800 Iterations in 61.405577659606934 seconds
+2024-04-17 21:49:41 - INFO - mistral_masked_test.csv is saved to /home/mrahma56/TSE_final/output/covid19

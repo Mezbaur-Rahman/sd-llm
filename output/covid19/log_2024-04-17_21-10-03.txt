@@ -1,0 +1,17 @@
+2024-04-17 21:10:04 - INFO - Completed 0/800 Iterations in 1.3185644149780273 seconds
+2024-04-17 21:10:41 - INFO - Completed 50/800 Iterations in 36.69688391685486 seconds
+2024-04-17 21:11:22 - INFO - Completed 100/800 Iterations in 40.86222696304321 seconds
+2024-04-17 21:12:06 - INFO - Completed 150/800 Iterations in 43.820425033569336 seconds
+2024-04-17 21:12:45 - INFO - Completed 200/800 Iterations in 39.07237386703491 seconds
+2024-04-17 21:13:24 - INFO - Completed 250/800 Iterations in 39.62569308280945 seconds
+2024-04-17 21:14:08 - INFO - Completed 300/800 Iterations in 44.01923131942749 seconds
+2024-04-17 21:14:54 - INFO - Completed 350/800 Iterations in 45.42536115646362 seconds
+2024-04-17 21:15:37 - INFO - Completed 400/800 Iterations in 42.91429805755615 seconds
+2024-04-17 21:16:16 - INFO - Completed 450/800 Iterations in 39.790467262268066 seconds
+2024-04-17 21:17:00 - INFO - Completed 500/800 Iterations in 43.816282749176025 seconds
+2024-04-17 21:17:47 - INFO - Completed 550/800 Iterations in 46.51409029960632 seconds
+2024-04-17 21:18:33 - INFO - Completed 600/800 Iterations in 46.48308515548706 seconds
+2024-04-17 21:19:14 - INFO - Completed 650/800 Iterations in 40.809377670288086 seconds
+2024-04-17 21:19:55 - INFO - Completed 700/800 Iterations in 40.99474763870239 seconds
+2024-04-17 21:20:39 - INFO - Completed 750/800 Iterations in 44.01986050605774 seconds
+2024-04-17 21:21:22 - INFO - vicuna_masked_test.csv is saved to /home/mrahma56/TSE_final/output/covid19

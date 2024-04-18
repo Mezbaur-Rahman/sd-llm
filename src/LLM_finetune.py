@@ -236,9 +236,9 @@ for i in range (len(test_data)):
         print(f"Time taken for {i}/{len(test_data)} inference: {round(output_time,2)} seconds")
             
 
-count = len(test_data[test_data['Stance'] == test_data['predicted_stance']])
-acc = count/len(test_data) * 100
-print(f"Accuracy: {acc}")
+# count = len(test_data[test_data['Stance'] == test_data['predicted_stance']])
+# acc = count/len(test_data) * 100
+# print(f"Accuracy: {acc}")
 # print(count,len(test_data))
 # print(count/len(test_data) * 100)
 
