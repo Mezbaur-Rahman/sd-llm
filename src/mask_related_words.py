@@ -14,6 +14,16 @@ from IPython.display import clear_output
 from evaluate import load
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
 import warnings
+import argparse
+from bert_score import score
+
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--dataset', type=str, help='dataset name')
+parser.add_argument('--model', type=str, help='pre-trained model (bert-base-uncased, roberta-base)')
+args = parser.parse_args()
+
 
 def csv2pd(filepath):
     
@@ -33,20 +43,28 @@ def json2pd(filepath):
 def pd2csv(df,output_dir,filename):
     df.to_csv(os.path.join(output_dir,filename),index= False)
     
-root_dir = "/home/mrahma56/TSE/"
-data_dir = root_dir + "data/"
-output_dir = root_dir + "output/"
-semeval_dir = data_dir + "semeval/"
+def make_path(*args):
+    path = os.path.join(*args)
+    if not os.path.isabs(path):
+        # Convert relative path to absolute path
+        path = os.path.abspath(path)
+    os.makedirs(path, exist_ok=True)
+    return path
 
-# semeval_test = csv2pd(semeval_dir + "test.csv")
-# semeval_test.head()
-test_df = csv2pd(data_dir + "test.csv")
+
+
+root_dir = "./"
+data_dir = make_path(root_dir + "data/",f"{args.dataset}")
+output_dir = make_path(root_dir + "output/",f"{args.dataset}")
+processed_data_dir = make_path(root_dir + "processed_data/",f"{args.dataset}")
+
+
+test_df = csv2pd(os.path.join(data_dir ,"test.csv"))
 # test_df.head()
 
 
 
-import torch
-from bert_score import score
+
 
 def replace_with_mask(target_word, text):
     """
@@ -60,7 +78,8 @@ def replace_with_mask(target_word, text):
     str: The modified text with the top 3 high-similarity words replaced with a mask.
     """
     # Load the BERT model
-    model = "roberta-base"
+    # model = "roberta-base"
+    model = args.model
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
     # Tokenize the text and remove multiple spaces
@@ -113,5 +132,7 @@ for i in range(len(test_df)):
         st = time.time()
         # break
 
-output_dir = output_dir + "semeval/"
-pd2csv(test_df,output_dir,"masked_test.csv")
+
+
+
+pd2csv(test_df,processed_data_dir,"masked_test.csv")

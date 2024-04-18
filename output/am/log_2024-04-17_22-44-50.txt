@@ -95,3 +95,10 @@
 2024-04-18 00:23:27 - INFO - Completed 4700/5109 Iterations in 61.71601939201355 seconds
 2024-04-18 00:24:31 - INFO - Completed 4750/5109 Iterations in 63.71290612220764 seconds
 2024-04-18 00:25:36 - INFO - Completed 4800/5109 Iterations in 64.6224570274353 seconds
+2024-04-18 00:26:41 - INFO - Completed 4850/5109 Iterations in 64.98192429542542 seconds
+2024-04-18 00:27:43 - INFO - Completed 4900/5109 Iterations in 62.398032903671265 seconds
+2024-04-18 00:28:47 - INFO - Completed 4950/5109 Iterations in 63.995054721832275 seconds
+2024-04-18 00:29:52 - INFO - Completed 5000/5109 Iterations in 64.58840918540955 seconds
+2024-04-18 00:30:54 - INFO - Completed 5050/5109 Iterations in 61.95739221572876 seconds
+2024-04-18 00:31:58 - INFO - Completed 5100/5109 Iterations in 64.08974862098694 seconds
+2024-04-18 00:32:07 - INFO - vicuna_masked_test.csv is saved to /home/mrahma56/TSE_final/output/am
