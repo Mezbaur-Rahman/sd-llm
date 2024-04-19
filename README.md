@@ -19,7 +19,8 @@ We have experimented with the following LLMs:<br>
 
 Task Description:<br>
 1. **MTSD**: Masked Text Stance Detection.<br>
-2. **FTSD**: Fine Tuned Stance Detection.<br>
+2. **FTSD**: Fine-Tuned Stance Detection.<br>
+3. **MTFSD**: Masked Text Fine-Tuned Stance Detection.<br>
 3. **SD**: Zero Shot Stance Detection.<br>
 <br>
 
@@ -61,4 +62,4 @@ python3 src/eval.py \
     --task "SD" \
     --dataset "semeval"
 ```
-Change the Model ID and Dataset accordingly.
+Change the Model ID, Dataset, and Task accordingly.
