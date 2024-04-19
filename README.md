@@ -45,13 +45,18 @@ python3 LLM_gen.py \
 ```
 Choose either 'MTSD' or 'SD' as task. <br><br>
 
-In order to finetune a smaller LLM, run the following command:
+In order to finetune a smaller LLM and evaluate on test data split, run the following command:
 ```
 export MODEL="TinyLlama/TinyLlama-1.1B-Chat-v1.0" 
 python3 src/LLM_finetune.py \
     --model $MODEL \
-    --dataset "semeval"
+    --dataset "semeval" \
+    --task "MTSD" \
+    --train_split "val" \
+    --do_train \
+    --do_evaluate
 ```
+Choose appropiate data split (either train or val).
 <br><br>
 
 Finally, to evalute and generate results, run the following command:
