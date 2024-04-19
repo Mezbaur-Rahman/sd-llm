@@ -9,7 +9,7 @@ To install the dependencies, first create a conda environment and activate it. T
 `pip install -r requirements.txt` <br><br>
 
 
-This code is designed to work with any valid Hugging Face model listed and is compatible with four datasets: 'semeval', 'am', 'pstance', and 'covid19'. Please adjust the model ID and dataset accordingly in any future commands.
+This code is designed to work with any valid Hugging Face model listed and is compatible with four datasets: 'semeval', 'am', 'pstance', and 'covid19'. Further details can be found [here](https://github.com/Mezbaur-Rahman/sd-llm/blob/main/data/Stance%20Detection%20Dataset%20Description.docx). Please adjust the model ID and dataset accordingly in any future commands.
 We have experimented with the following LLMs:<br>
 ```
 "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
