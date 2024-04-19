@@ -40,6 +40,7 @@ args = parser.parse_args()
 print(args)
 
 
+# Uncomment the following block to check CUDA availability and memory stats
 # if torch.cuda.is_available():
 #     device_name = torch.cuda.get_device_name(0)
 #     print(f"CUDA device is available: {device_name}")
@@ -50,6 +51,8 @@ print(args)
 # else:
 #     print("CUDA device is not available")
 
+
+# Function to create directory and return its absolute path
 def make_path(*args):
     path = os.path.join(*args)
     if not os.path.isabs(path):
@@ -83,6 +86,7 @@ output_model_dir = make_path(model_dir,model_id.split("/")[0])
 # time.sleep(1000)
 
 
+# Function to read CSV files and handle encoding issues
 def csv2pd(filepath):
     
     encodings_to_try = ['utf-8', 'ISO-8859-1', 'latin1', 'cp1252', 'utf-16']
@@ -94,28 +98,33 @@ def csv2pd(filepath):
         except UnicodeDecodeError:
             print(f'Failed with encoding: {encoding}')
 
+# Function to read JSON files into pandas DataFrame
 def json2pd(filepath):
     df = pd.read_json(filepath,orient='records', lines=True)
     return df
 
+# Function to save DataFrame to CSV
 def pd2csv(df,output_dir,filename):
     df.to_csv(os.path.join(output_dir,filename),index= False)
     
-# we need to reformat the data in teh ChatML format.
 
+# Function to format training data
 def formatted_train(input,response)->str:
     return f"<|im_start|>user\n{input}<|im_end|>\n<|im_start|>assistant\n{response}<|im_end|>\n"
 
+# Function to prepare training data
 def prepare_train_data(data_df):
     data_df["text"] = data_df[["Tweet", "Stance","Target"]].apply(lambda x: "<|im_start|>user\n" + "What is the attitude of the sentence: '" + x["Tweet"] + "' to the Target: '" + x["Target"]+ "'? Select an answer from(favor,against,none)." +" <|im_end|>\n<|im_start|>assistant\n" + x["Stance"].lower() + "<|im_end|>\n", axis=1)
     data = Dataset.from_pandas(data_df)
     return data
 
+# Function to prepare test data
 def prepare_test_data(data_df):
     data_df["text"] = data_df[["Tweet", "Stance","Target"]].apply(lambda x: "What is the attitude of the sentence: '" + x["Tweet"] + "' to the Target: '" + x["Target"]+ "'? Select an answer from(favor,against,none).", axis=1)
     # data = Dataset.from_pandas(data_df)
     return data_df
 
+# Load train and test data based on train_split argument
 if args.train_split == "train":
     train_df = csv2pd(os.path.join(data_dir,"train.csv"))
     test_df = csv2pd(os.path.join(data_dir, "test.csv"))
@@ -127,13 +136,14 @@ else:
     train_df.rename(columns = {'masked_tweet':'Tweet'}, inplace = True)
     test_df.rename(columns = {'masked_tweet':'Tweet'}, inplace = True)
     
-print(train_df.columns)
+# print(train_df.columns)
 # time.sleep(1000)
 
-
+# Prepare train and test data
 data = prepare_train_data(train_df)
 test_data = prepare_test_data(test_df)
 
+# Function to get model and tokenizer
 def get_model_and_tokenizer(mode_id):
 
     tokenizer = AutoTokenizer.from_pretrained(mode_id)
@@ -148,13 +158,15 @@ def get_model_and_tokenizer(mode_id):
     model.config.pretraining_tp=1
     return model, tokenizer
 
+# Initialize model and tokenizer
 model, tokenizer = get_model_and_tokenizer(model_id)
 
+# Define PEFT configuration
 peft_config = LoraConfig(
         r=16, lora_alpha=16, lora_dropout=0.05, bias="none", task_type="CAUSAL_LM"
     )
 
-
+# Define training arguments
 training_arguments = TrainingArguments(
         output_dir=output_model_dir,
         per_device_train_batch_size=4,
@@ -170,6 +182,7 @@ training_arguments = TrainingArguments(
         # push_to_hub=True
     )
 
+# Initialize Trainer
 trainer = SFTTrainer(
         model=model,
         train_dataset=data,
@@ -181,17 +194,19 @@ trainer = SFTTrainer(
         max_seq_length=1024
     )
 
+
+# Train the model if do_train argument is set
 if args.do_train:
     trainer.train()
     print("Training is done.")
 
 
+#exit if do_evaluate is not set
+if not args.do_evaluate:
+    sys.exit("Evaluation is not enabled. Exiting...")
 
-# if not args.do_evaluate:
-#     sys.exit("Evaluation is not enabled. Exiting...")
 
-
-
+# Get the latest model checkpoint directory
 model_ckpt_dirs = [name for name in os.listdir(output_model_dir) if os.path.isdir(os.path.join(output_model_dir, name)) and name!= "runs"]
 model_ckpt_dirs = sorted(model_ckpt_dirs, key=lambda x: int(x.split('-')[-1]))
 model_ckpt = os.path.join(output_model_dir,model_ckpt_dirs[-1])
@@ -204,17 +219,20 @@ model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16
     
 model_path = model_ckpt
 
+# Initialize PeftModel
 peft_model = PeftModel.from_pretrained(model, model_path, from_transformers=True, device_map="auto")
 
+# Merge and unload the model
 model = peft_model.merge_and_unload()
 
 
+# Function to format prompt
 def formatted_prompt(question)-> str:
     return f"<|im_start|>user\n{question}<|im_end|>\n<|im_start|>assistant:"
 
 
 
-
+# Function to generate response
 def generate_response(user_input):
     prompt = formatted_prompt(user_input)
 
@@ -236,6 +254,7 @@ def generate_response(user_input):
     # print(f"Time taken for inference: {round(output_time,2)} seconds")
 
 
+# Function to check stance from the generated response
 def check_stance(text):
     text = text.split('<|im_start|>assistant:')[1].split('<|im_end|>')[0].strip()
     if "against" in text.lower():
@@ -245,7 +264,8 @@ def check_stance(text):
     else:
         return "NONE"
 
-    
+
+# Perform generation on test data
 start_time = perf_counter()
 test_data['tinyllama_response'] = ""
 
@@ -264,6 +284,7 @@ for i in range (len(test_data)):
 # print(count,len(test_data))
 # print(count/len(test_data) * 100)
 
+# Save test data
 if args.task == "MTSD":
     pd2csv(test_data,output_dir,f"mtsd_{base_model}_finetuned_test.csv")
     print(f"MTSD Finetuned Test Data Saved in {output_dir}")
