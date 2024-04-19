@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--model', type=str, help='huggingface model id')
 parser.add_argument('--dataset', type=str, help='dataset name')
-parser.add_argument('--task', type=str, help='masked text stance detection (MTSD) or normal stance detection (SD) or fine-tuned text stance detection (FTSD) ')
+parser.add_argument('--task', type=str, help='masked text stance detection (MTSD) or normal stance detection (SD) or fine-tuned text stance detection (FTSD) or masked text finetuned stance detection (MTFSD) ')
 
 
 args = parser.parse_args()
@@ -75,6 +75,8 @@ if args.task == 'FTSD':
     test_df = csv2pd(os.path.join(output_dir,f"{base_model}_finetuned_test.csv"))
 elif args.task == 'MTSD':
     test_df = csv2pd(os.path.join(output_dir,f"{base_model}_masked_test.csv"))
+elif args.task == 'MTFSD':
+    test_df = csv2pd(os.path.join(output_dir,f"{base_model}_finetuned_masked_test.csv"))
 else:
     test_df = csv2pd(os.path.join(output_dir,f"{base_model}_test.csv"))
 
@@ -115,3 +117,4 @@ else:
 print('F1 Score:',f1_score(test_df['Stance'], test_df['Predicted'], average='weighted'))
 #calculate accuracy
 print('Accuracy: ',accuracy_score(test_df['Stance'], test_df['Predicted']))
+# print("Length of test data: ",len(test_df))

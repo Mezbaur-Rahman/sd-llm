@@ -265,7 +265,7 @@ for i in range (len(test_data)):
 # print(count/len(test_data) * 100)
 
 if args.task == "MTSD":
-    pd2csv(test_data,output_dir,f"MTSD_{base_model}_finetuned_test.csv")
+    pd2csv(test_data,output_dir,f"mtsd_{base_model}_finetuned_test.csv")
     print(f"MTSD Finetuned Test Data Saved in {output_dir}")
 else:
     pd2csv(test_data,output_dir,f"{base_model}_finetuned_test.csv")
