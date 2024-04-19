@@ -63,3 +63,32 @@ python3 src/eval.py \
     --dataset "semeval"
 ```
 Change the Model ID, Dataset, and Task accordingly.
+
+# Directory Structure:
+```
+.
+└── sd-llm/
+    ├── data/
+    │   ├── am
+    │   ├── combined
+    │   ├── covid19
+    │   ├── pstance
+    │   └── semeval
+    ├── output/
+    │   ├── am
+    │   ├── combined
+    │   ├── covid19
+    │   ├── pstance
+    │   └── semeval
+    ├── processed_data/
+    │   ├── am
+    │   ├── combined
+    │   ├── covid19
+    │   ├── pstance
+    │   └── semeval
+    ├── results
+    ├── saved_model
+    ├── src
+    ├── README.md
+    └── requirements.txt
+```
