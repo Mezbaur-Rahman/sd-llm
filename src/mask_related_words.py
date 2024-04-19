@@ -19,7 +19,7 @@ from bert_score import score
 import logging
 import datetime
 
-
+# Parsing command line arguments
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--dataset', type=str, help='dataset name')
@@ -27,7 +27,7 @@ parser.add_argument('--split', type=str, help='train or test or val')
 parser.add_argument('--model', type=str, help='pre-trained model (bert-base-uncased, roberta-base)')
 args = parser.parse_args()
 
-
+# Function to read CSV files with various encodings
 def csv2pd(filepath):
     
     encodings_to_try = ['utf-8', 'ISO-8859-1', 'latin1', 'cp1252', 'utf-16']
@@ -38,14 +38,17 @@ def csv2pd(filepath):
             return df
         except UnicodeDecodeError:
             print(f'Failed with encoding: {encoding}')
-
+            
+# Function to read JSON files into pandas DataFrame
 def json2pd(filepath):
     df = pd.read_json(filepath,orient='records', lines=True)
     return df
 
+# Function to save DataFrame to CSV
 def pd2csv(df,output_dir,filename):
     df.to_csv(os.path.join(output_dir,filename),index= False)
-    
+
+# Function to create directory and return its absolute path
 def make_path(*args):
     path = os.path.join(*args)
     if not os.path.isabs(path):
@@ -55,12 +58,13 @@ def make_path(*args):
     return path
 
 
-
+# Setting up directories
 root_dir = "./"
 data_dir = make_path(root_dir + "data/",f"{args.dataset}")
 output_dir = make_path(root_dir + "output/",f"{args.dataset}")
 processed_data_dir = make_path(root_dir + "processed_data/",f"{args.dataset}")
 
+# Determining which split to use (train, test, val) and loading the corresponding dataset
 if args.split == "train":
     df = csv2pd(os.path.join(data_dir ,"train.csv"))
     print("Split is train")
@@ -70,8 +74,8 @@ elif args.split == "test":
 else:
     df = csv2pd(os.path.join(data_dir ,"val.csv"))
     print("Split is val")
-print("Length of the dataframe:",len(df))
-print("Processed Data Directory:",processed_data_dir)
+# print("Length of the dataframe:",len(df))
+# print("Processed Data Directory:",processed_data_dir)
 # time.sleep(1000)
 
 
@@ -80,7 +84,7 @@ print("Processed Data Directory:",processed_data_dir)
 
 def replace_with_mask(target_word, text):
     """
-    Replaces the top 3 words in the given text with a similarity score greater than 80% with a mask.
+    Replaces the top 3 words in the given text with a similarity score greater than 75% with a mask.
     
     Parameters:
     target_word (str): The target word to compare against.

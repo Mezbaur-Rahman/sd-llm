@@ -19,6 +19,7 @@ import argparse
 import datetime
 
 
+# Parsing command line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--device', type=int, default=0, help='CUDA device')
 parser.add_argument('--model', type=str, help='huggingface model id')
@@ -35,10 +36,10 @@ parser.add_argument('--do_train', action='store_true', default=False, help='enab
 parser.add_argument('--do_evaluate', action='store_true', default=False, help='enable evaluation')
 args = parser.parse_args()
 print(args)
-time.sleep(5)
+# time.sleep(5)
 
 
-
+# Function to create directory and return its absolute path
 def make_path(*args):
     path = os.path.join(*args)
     if not os.path.isabs(path):
@@ -47,6 +48,7 @@ def make_path(*args):
     os.makedirs(path, exist_ok=True)
     return path
 
+# Set up directories
 root_dir = "./"
 data_dir = make_path(root_dir + "data/",f"{args.dataset}")
 output_dir = make_path(root_dir + "output/",f"{args.dataset}")
@@ -57,11 +59,14 @@ processed_data_dir = make_path(root_dir + "processed_data/",f"{args.dataset}")
 # model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 # model_id = "lmsys/vicuna-7b-v1.5"
 # model_id = "meta-llama/Llama-2-7b-chat-hf"
+
+# Extract base model name from model_id
 model_id = args.model
 base_model = model_id.split("/")[1].split("-")[0].lower()
 output_model_dir = make_path(model_dir,base_model)
 
 
+# Function to read CSV files with various encodings
 def csv2pd(filepath):
     
     encodings_to_try = ['utf-8', 'ISO-8859-1', 'latin1', 'cp1252', 'utf-16']
@@ -88,9 +93,10 @@ def pd2csv(df,output_dir,filename):
 # base_model = "lmsys/vicuna-7b-v1.5"
 # base_model = "meta-llama/Llama-2-7b-chat-hf"
 
+# Setting device to "cuda" if CUDA is available, otherwise "cpu"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-
+# Initializing model and tokenizer from pretrained model
 model = AutoModelForCausalLM.from_pretrained(model_id,  device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
@@ -140,6 +146,7 @@ def convert_to_llama_format(prompt):
     
     return llama_prompt
 
+# Function to generate text based on input prompt
 def generate_text(prompt, max_new_tokens=25, num_return_sequences=1, top_k=50, top_p=0.95, num_beams=4, early_stopping=True):
     input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
     # print(device)
@@ -162,28 +169,15 @@ def generate_text(prompt, max_new_tokens=25, num_return_sequences=1, top_k=50, t
     return generated_text
 
 
-# root_dir = "/home/mrahma56/TSE/"
-# data_dir = root_dir + "data/"
-# processed_data_dir = root_dir + "processed_data/"
-# output_dir = root_dir + "output/"
-# semeval_dir = data_dir + "semeval/"
-# semeval_out_dir = output_dir + "semeval/"
 
 
-# semeval_test = csv2pd(semeval_dir + "test.csv")
-# semeval_test.head()
 
-# test_df = csv2pd(data_dir + "test.csv")
-# test_df.head()
-
-# test_df = csv2pd(os.path.join(processed_data_dir,f'{args.dataset}',"masked_test.csv"))
 if args.task == "MTSD":
     test_df = csv2pd(os.path.join(processed_data_dir,"masked_test.csv"))
 else:
     test_df = csv2pd(os.path.join(data_dir,"test.csv"))
 
-# print(test_df.head())
-# time.sleep(1000)
+
 # base_prompt = "Your are given a tweet and a target word. Your task is to determine the tweet's stance towards the target. \nTweet: $tweet\nTarget: $target\nNow generate the stance of the tweet towards the target. The stance can either of the following: 'FAVOR', 'AGAINST', 'NONE'."
 base_prompt = "What is the attitude of the sentence: '$tweet' to the Target: '$target'? Select an answer from(favor,against,none)."
 # model_name = base_model.split('/')[-1]
